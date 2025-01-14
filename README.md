@@ -1,2 +1,4 @@
-Waleed owes me RM100  
-Dr. Azwan HELP!! Zahirul wants to kill me
+To-Do List:
+- Connect Username, Password, Score to Firebase
+- Host Website on Firebase instead of Locally
+- Design CSS that looks nice when playing on phone
