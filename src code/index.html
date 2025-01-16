@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Math4Kids</title>
+</head>
+<body>
+  <!-- ========== HOME SCREEN ========== -->
+  <div id="homeScreen">
+    <h1>Welcome to Math4Kids</h1>
+    
+    <!-- Greeting for logged-in users -->
+    <p id="greetingMsg" style="display: none;">
+      Hello, <span id="usernameDisplay"></span>!
+    </p>
+
+    <button id="startGameBtn">Start Game</button>
+    <button id="loginBtn">Login</button>
+    <button id="leaderboardBtn">Leaderboard</button>
+  </div>
+
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="loginScreen" style="display: none;">
+    <h2>Login</h2>
+    <form id="loginForm" autocomplete="off">
+      <label for="loginUsername">Username:</label><br>
+      <input type="text" id="loginUsername" name="loginUsername" autocomplete="off"><br><br>
+
+      <label for="loginPassword">Password:</label><br>
+      <input type="password" id="loginPassword" name="loginPassword" autocomplete="off"><br><br>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p>
+      Don’t already have an account?
+      <a href="#" id="showRegisterScreen">Register here</a>
+    </p>
+    
+    <button id="loginBackBtn">Back to Main Menu</button>
+  </div>
+
+  <!-- ========== REGISTER SCREEN ========== -->
+  <div id="registerScreen" style="display: none;">
+    <h2>Register</h2>
+    <form id="registerForm" autocomplete="off">
+      <label for="registerUsername">Username:</label><br>
+      <input type="text" id="registerUsername" name="registerUsername" autocomplete="off"><br><br>
+
+      <label for="registerPassword">Password:</label><br>
+      <input type="password" id="registerPassword" name="registerPassword" autocomplete="off"><br><br>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p>
+      Already have an account?
+      <a href="#" id="showLoginScreen">Login here</a>
+    </p>
+  </div>
+
+  <!-- ========== GAME SCREEN ========== -->
+  <div id="gameScreen" style="display: none;">
+    <h2>Math Game</h2>
+    
+    <!-- Timer Display -->
+    <div id="timer">
+      Time left: <span id="timeLeft">30</span> seconds
+    </div>
+    
+    <!-- Score Display -->
+    <div id="scoreContainer">
+      Score: <span id="scoreValue">0</span>
+    </div>
+    
+    <!-- Question and Answer -->
+    <div id="questionContainer">
+      <p id="questionText"></p>
+      <input type="number" id="answerInput">
+      <button id="submitAnswerBtn">Submit</button>
+    </div>
+    
+    <p id="feedback"></p>
+    
+    <button id="backToMenuBtn">Back to Main Menu</button>
+  </div>
+
+  <!-- ========== LEADERBOARD SCREEN ========== -->
+  <div id="leaderboardScreen" style="display: none;">
+    <h2>Leaderboard</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardTableBody">
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+
+    <button id="leaderboardBackBtn">Back to Main Menu</button>
+  </div>
+
+  <!-- ========== SCRIPT ========== -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
