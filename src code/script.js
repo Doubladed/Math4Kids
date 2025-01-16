@@ -1,3 +1,32 @@
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js"; // Add this for Realtime Database
+import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCoU583cyoYVWczJ_mSjLieFL_umb_ZvWU",
+  authDomain: "math4kids-69dc3.firebaseapp.com",
+  databaseURL: "https://math4kids-69dc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "math4kids-69dc3",
+  storageBucket: "math4kids-69dc3.firebasestorage.app",
+  messagingSenderId: "723352978340",
+  appId: "1:723352978340:web:4c5770ded1f58fc4c73731"
+};
+
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// Initialize the Realtime Database
+const database = getDatabase(app);
+
+// Test Firebase connection (optional)
+console.log("Firebase App Name:", app.name);  // Should log "[DEFAULT]" if Firebase is connected
+
+
 /************************************
  * DOM ELEMENTS
  ************************************/
@@ -113,53 +142,68 @@ function showLeaderboardScreen() {
  ************************************/
 // This function updates scoreboard with the user's new high score
 function updateLeaderboard(username, newScore) {
-  // 1. Check if the user already exists in the scoreboard
-  const existingEntry = scoreboard.find(entry => entry.username === username);
+  const leaderboardRef = ref(database, `leaderboard/${username}`);
 
-  if (existingEntry) {
-    // 2. If so, only update score if newScore is higher
-    if (newScore > existingEntry.score) {
-      existingEntry.score = newScore;
+  get(leaderboardRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const existingScore = snapshot.val().score;
+      if (newScore > existingScore) {
+        set(leaderboardRef, { username: username, score: newScore })
+          .then(() => console.log("New high score saved!"))
+          .catch((error) => console.error("Error updating score:", error));
+      } else {
+        console.log("No update needed; existing score is higher or the same.");
+      }
+    } else {
+      set(leaderboardRef, { username: username, score: newScore })
+        .then(() => console.log("Score saved for new user!"))
+        .catch((error) => console.error("Error saving score:", error));
     }
-  } else {
-    // 3. If not, add a new entry
-    scoreboard.push({ username, score: newScore });
-  }
-
-  // 4. Save to localStorage
-  localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
-}
-
-function buildLeaderboardTable() {
-  // Clear existing rows
-  leaderboardTableBody.innerHTML = "";
-
-  // Sort scoreboard by highest score first
-  const sorted = [...scoreboard].sort((a, b) => b.score - a.score);
-
-  // Build rows
-  sorted.forEach((entry, index) => {
-    const tr = document.createElement("tr");
-
-    // Rank (#) column
-    const rankTd = document.createElement("td");
-    rankTd.textContent = index + 1; // 1-based index
-
-    // Name column
-    const nameTd = document.createElement("td");
-    nameTd.textContent = entry.username;
-
-    // Score column
-    const scoreTd = document.createElement("td");
-    scoreTd.textContent = entry.score;
-
-    tr.appendChild(rankTd);
-    tr.appendChild(nameTd);
-    tr.appendChild(scoreTd);
-
-    leaderboardTableBody.appendChild(tr);
+  }).catch((error) => {
+    console.error("Error reading leaderboard:", error);
   });
 }
+
+
+function buildLeaderboardTable() {
+  // Reference to the leaderboard in Firebase
+  const leaderboardRef = ref(database, "leaderboard");
+
+  get(leaderboardRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      // Clear the leaderboard table
+      leaderboardTableBody.innerHTML = "";
+
+      const data = snapshot.val();
+      const entries = Object.values(data).sort((a, b) => b.score - a.score);  // Sort by highest score
+
+      // Create table rows for each entry
+      entries.forEach((entry, index) => {
+        const tr = document.createElement("tr");
+
+        const rankTd = document.createElement("td");
+        rankTd.textContent = index + 1;
+
+        const nameTd = document.createElement("td");
+        nameTd.textContent = entry.username;
+
+        const scoreTd = document.createElement("td");
+        scoreTd.textContent = entry.score;
+
+        tr.appendChild(rankTd);
+        tr.appendChild(nameTd);
+        tr.appendChild(scoreTd);
+
+        leaderboardTableBody.appendChild(tr);
+      });
+    } else {
+      console.log("No leaderboard data found.");
+    }
+  }).catch((error) => {
+    console.error("Error fetching leaderboard data:", error);
+  });
+}
+
 
 /************************************
  * EVENT LISTENERS: HOME SCREEN
@@ -196,19 +240,26 @@ loginForm.addEventListener("submit", (e) => {
     return;
   }
 
-  const existingUser = users.find(
-    (user) => user.username === username && user.password === password
-  );
+  const dbRef = ref(database, `users/${username}`);
 
-  if (existingUser) {
-    alert("Login successful!");
-    currentUser = username;
-    loginUsername.value = "";
-    loginPassword.value = "";
-    showHomeScreen();
-  } else {
-    alert("Invalid credentials. Please try again.");
-  }
+  get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      if (userData.password === password) {
+        alert("Login successful!");
+        currentUser = username;
+        loginUsername.value = "";
+        loginPassword.value = "";
+        showHomeScreen();
+      } else {
+        alert("Invalid password. Please try again.");
+      }
+    } else {
+      alert("User not found. Please register.");
+    }
+  }).catch((error) => {
+    alert("Error logging in: " + error.message);
+  });
 });
 
 loginBackBtn.addEventListener("click", () => {
@@ -229,22 +280,26 @@ registerForm.addEventListener("submit", (e) => {
     return;
   }
 
-  const userExists = users.some((user) => user.username === username);
-  if (userExists) {
-    alert("Username already exists. Please choose another.");
-    return;
-  }
+  const dbRef = ref(database, `users/${username}`);
 
-  // Create & save user
-  const newUser = { username, password };
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Registration successful! You can now log in.");
-  registerUsername.value = "";
-  registerPassword.value = "";
-
-  showLoginScreen();
+  get(dbRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      alert("Username already exists. Please choose another.");
+    } else {
+      set(dbRef, { username, password })
+        .then(() => {
+          alert("Registration successful! You can now log in.");
+          registerUsername.value = "";
+          registerPassword.value = "";
+          showLoginScreen();
+        })
+        .catch((error) => {
+          alert("Error registering: " + error.message);
+        });
+    }
+  }).catch((error) => {
+    alert("Error checking username: " + error.message);
+  });
 });
 
 showRegisterLink.addEventListener("click", (e) => {
@@ -327,9 +382,9 @@ function endGame() {
   timerDisplay.textContent = timeRemaining;
   feedback.textContent = `Time's up! Game over. Final Score: ${score}`;
 
-  // If a user is logged in, update the leaderboard with their highest score
+  // If the user is logged in, update their score in Firebase
   if (currentUser) {
-    updateLeaderboard(currentUser, score);
+    updateLeaderboard(currentUser, score);  // This updates the score in Firebase
   }
 }
 
