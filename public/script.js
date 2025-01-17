@@ -392,8 +392,18 @@ function endGame() {
  * EVENT LISTENERS: GAME SCREEN
  ************************************/
 submitAnswerBtn.addEventListener("click", () => {
-  checkAnswer();
+  const userAnswer = answerInput.value.trim();
+
+  // Allow only numbers, letters, and specific symbols
+  if (!/^[0-9a-zA-Z+-]+$/.test(userAnswer)) {
+    alert("Please enter a valid answer.");
+    return;
+  }
+
+  // Proceed with checking the answer
+  checkAnswer(parseInt(userAnswer, 10)); // Adjust this based on your requirements
 });
+
 
 backToMenuBtn.addEventListener("click", () => {
   clearInterval(timerInterval);
