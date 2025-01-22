@@ -1,0 +1,160 @@
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+  color: #333;
+  text-align: center;
+}
+
+.center-image {
+  display: block;
+  width: 100%; /* Make the image take up the full width of the container */
+  max-width: 500px; /* Set the maximum width */
+  height: 200px; /* Adjust the height as needed */
+  object-fit: cover; /* This will crop the image while covering the container */
+  overflow: hidden; /* Hide any part of the image that overflows */
+  margin: 40px auto;
+
+
+}
+
+.left-image, .right-image {
+  
+  width: 70px; /* Adjust the size as needed */
+  height: auto;
+}
+ 
+
+/* Header Styles */
+h1, h2 {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: #4CAF50;
+  margin: 20px 0;
+}
+
+/* Buttons */
+button {
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background-color: #45a049;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="password"] {
+  font-size: 16px;
+  padding: 8px;
+  margin: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 300px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Containers */
+#homeScreen, #loginScreen, #registerScreen, #gameScreen, #leaderboardScreen {
+  display: none;
+  margin: auto;
+  max-width: 1000px;
+  background: white;
+  padding: 20px;
+   
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#homeScreen {
+  display: block; /* Default visible screen */
+}
+
+/* Game Elements */
+#timer, #scoreContainer {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+#questionContainer {
+  margin: 20px 0;
+}
+
+#feedback {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f44336;
+}
+
+/* Table (Leaderboard) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Links */
+a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  button, input[type="text"], input[type="password"] {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  h1, h2 {
+    font-size: 24px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+}
