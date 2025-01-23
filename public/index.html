@@ -3,6 +3,7 @@
 <head>
   <link rel="stylesheet" href="style.css">
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Math4Kids</title>
 </head>
 <body>
@@ -10,18 +11,20 @@
   <div id="homeScreen">
     <img src="Math-removebg-preview.png" alt="Math4Kids Logo" class="center-image">
     <h1>
-    <img src="depositphotos_116833154-stock-illustration-cartoon-kids-icon-removebg-preview.png" alt="Math4Kids Logo" class="left-image">
-     Welcome to Math4Kids
-    <img src="cute-calculator-icon-png.webp" alt="Math4Kids Logo" class="right-image">
-  </h1>
+      <img src="depositphotos_116833154-stock-illustration-cartoon-kids-icon-removebg-preview.png" alt="Math4Kids Logo" class="left-image">
+      Welcome to Math4Kids
+      <img src="cute-calculator-icon-png.webp" alt="Math4Kids Logo" class="right-image">
+    </h1>
     <!-- Greeting for logged-in users -->
     <p id="greetingMsg" style="display: none;">
       Hello, <span id="usernameDisplay"></span>!
     </p>
 
-    <button id="startGameBtn">Start Game</button>
-    <button id="loginBtn">Login</button>
-    <button id="leaderboardBtn">Leaderboard</button>
+    <div class="button-container">
+      <button id="startGameBtn">Start Game</button>
+      <button id="loginBtn">Login</button>
+      <button id="leaderboardBtn">Leaderboard</button>
+    </div>
   </div>
 
   <!-- ========== LOGIN SCREEN ========== -->
