@@ -406,6 +406,7 @@ submitAnswerBtn.addEventListener("click", () => {
 
 
 backToMenuBtn.addEventListener("click", () => {
+  endGame();
   clearInterval(timerInterval);
   showHomeScreen();
 });
